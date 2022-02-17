@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package users.v1;
+
+option go_package = "github.com/raymond-design/buffy/proto/users/v1;users";
+
+service UserService {
+  rpc AddUser(AddUserRequest) returns (AddUserResponse);
+}
+
+message User {
+  string id = 1;
+  string user_name = 2;
+}
+
+message AddUserRequest {
+  string user_name = 1;
+}
+
+message AddUserResponse {
+  User user = 1;
+}
