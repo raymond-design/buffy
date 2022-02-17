@@ -5,9 +5,11 @@ import (
 	"net"
 	"os"
 
+	userspb "github.com/raymond-design/buffy/proto/users/v1"
+	"github.com/raymond-design/buffy/users"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
-	userspb "github.com/raymond-design/buffy/proto/users/v1;users"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -20,11 +22,12 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	userspb.RegisterUserServiceServer(server, nil)
+	userspb.RegisterUserServiceServer(server, &users.Server{})
 	reflection.Register(server)
 
-	log.Infoln("Server listening on:", listender.Addr().String()
-	err = server.serve(listener)
+	log.Infoln("Server listening on:", listener.Addr().String())
+
+	err = server.Serve(listener)
 	if err != nil {
 		log.Fatal(err)
 	}

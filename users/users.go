@@ -1,15 +1,18 @@
 package users
 
 import (
+	"context"
 	"sync"
-	"github.com/gofrc/uuid"
-	userspb "github.com/raymond-design/buffy/proto/users/v1;users"
+
+	"github.com/gofrs/uuid"
+	userspb "github.com/raymond-design/buffy/proto/users/v1"
 )
+
 type Server struct {
 	users []*userspb.User
 	mutex sync.Mutex
 
-	*userspb.UnimplementedUserSerivceServer
+	*userspb.UnimplementedUserServiceServer
 }
 
 func (s *Server) AddUser(ctx context.Context, req *userspb.AddUserRequest) (*userspb.AddUserResponse, error) {
@@ -17,13 +20,13 @@ func (s *Server) AddUser(ctx context.Context, req *userspb.AddUserRequest) (*use
 	defer s.mutex.Unlock()
 
 	user := &userspb.User{
-		Username: req.user_name,
-		Id: uuid.Must(uuid.NewV4().String()),
+		UserName: req.UserName,
+		Id:       uuid.Must(uuid.NewV4()).String(),
 	}
 
 	s.users = append(s.users, user)
 
-	returnv &userspb.AddUserResponse{
+	return &userspb.AddUserResponse{
 		User: user,
 	}, nil
 }
